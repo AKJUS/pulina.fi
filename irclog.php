@@ -887,7 +887,7 @@ span.message {
 }
 
 .msg-td span {
-    margin-left: 9px;
+    margin-left: 0;
 }
 
 table,
