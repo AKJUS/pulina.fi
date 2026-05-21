@@ -802,6 +802,7 @@ if(isset($_GET['time'])) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= htmlspecialchars($_GET['channel']);?> IrcScroller</title>
         <style>
 
@@ -907,11 +908,21 @@ tr {
 a:link, a:visited, a:active {
     text-decoration: none;
     color: #3498db;
+    word-break: break-all;
+    overflow-wrap: anywhere;
 }
 
 a:hover {
     text-decoration: underline;
      color: #1abc9c;
+}
+
+.msg-td,
+.msg-td span,
+span.message {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    min-width: 0;
 }
 
 #container {
