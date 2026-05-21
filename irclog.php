@@ -851,6 +851,13 @@ body {
     font: 14px 'SF Mono', 'Menlo', -apple-system, 'Roboto', 'Rubik', system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, Helvetica Neue, Arial;
     color: rgba(248, 248, 242, 0.77);
     background: #0c162d;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+a {
+    font-size: inherit;
+    line-height: inherit;
 }
 span.message {
     /* width: 95%; */
