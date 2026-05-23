@@ -25,7 +25,7 @@ ini_set( 'date.timezone', 'Europe/Helsinki' );
 if ( file_exists( '/var/www/pulina/test.log' ) ) {
     $logfile = '/var/www/pulina/test.log';
 } else {
-    $logfile = '/var/www/pulina.fi/public_html/pulina-days/pul-'.strftime('%Y-%m-%d').'.log';
+    $logfile = '/var/www/pulina.fi/public_html/pulina-days/pul-'.date('Y-m-d').'.log';
 }
 
 // Starting offset in bytes (how many bytes are readed from end of file?)
@@ -65,10 +65,11 @@ $polling = true;
 // fetching new messages are delayed.
 // Set $loadavg to false if throtling is not wanted
 // (eg, in windows enviroment, it does not work).
+$loadavg = false;
+$delaytime = 5;
+$maxdelay = 10;
 if(is_readable('/proc/loadavg')) {
     $loadavg = 10;
-    $delaytime = 5;
-    $maxdelay = 10;
 }
 
 // Use page compression?
@@ -163,19 +164,19 @@ function irc2html($texte){
                 //->Mettre en couleur
                 $fg1="";$fg2="";$bg1="";$bg2="";
                 $i++;$chr = substr($texte,$i,1);
-                if(ereg("[0-9]",$chr)){
+                if(preg_match('/[0-9]/', $chr)){
                     $fg1=$chr;$i++;
                     $chr=substr($texte,$i,1);
-                    if(ereg("[0-9]",$chr)){
+                    if(preg_match('/[0-9]/', $chr)){
                         $fg2=$chr;$i++;$chr=substr($texte,$i,1);
                     }
 
                     if($chr==","){
                         $i++;$chr = substr($texte,$i,1);
-                        if(ereg("[0-9]",$chr)){
+                        if(preg_match('/[0-9]/', $chr)){
                             $bg1 = $chr;$i++;
                             $chr = substr($texte,$i,1);
-                            if(ereg("[0-9]",$chr)){
+                            if(preg_match('/[0-9]/', $chr)){
                                 $bg2=$chr;
                             }
                             else{
@@ -579,7 +580,7 @@ function getMessagesLogfile(&$pos,$channe=null) {
             $pos = intval($pos);
             if($pos < 0 || $pos > $totalsize) {
                 // You fuckwad
-                fseek($fp, -$startoffset, SEEK_END);
+                fseek($fp, -$startoffsetbytes, SEEK_END);
                 $readAmmount=$startoffsetbytes;
             } else {
                 fseek($fp, $pos);
@@ -594,7 +595,7 @@ function getMessagesLogfile(&$pos,$channe=null) {
 
             // Wait for new event
             clearstatcache();
-            sleep(0.5);
+            usleep(500000);
             continue;
         } else {
             // read logfile
@@ -761,7 +762,7 @@ if(isset($_GET['time'])) {
             if($maxdelay >= ini_get('max_execution_time')) $maxdelay = ini_get('max_execution_time')-(time()-$starttime)-1;
 
             if($delay > $maxdelay) $delay = $maxdelay;
-            sleep($delay);
+            sleep((int) $delay);
         }
     }
 
